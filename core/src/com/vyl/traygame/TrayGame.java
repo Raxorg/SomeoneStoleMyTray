@@ -2,10 +2,8 @@ package com.vyl.traygame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.vyl.traygame.screens.MainMenu;
+import com.vyl.traygame.screens.RestaurantScreen;
 
 public class TrayGame extends Game {
 
@@ -19,6 +17,14 @@ public class TrayGame extends Game {
     }
 
     public void touchDown(float screenX, float screenY) {
-        mainMenu.touchDown(screenX,screenY);
+        if (screen instanceof MainMenu) {
+            mainMenu.touchDown(screenX, screenY);
+        }
+    }
+
+    public void keyAction(int keycode, boolean down) {
+        if (screen instanceof RestaurantScreen) {
+            ((RestaurantScreen) screen).keyAction(keycode, down);
+        }
     }
 }
