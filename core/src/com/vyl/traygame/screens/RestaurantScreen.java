@@ -10,6 +10,7 @@ import com.vyl.traygame.entities.Customer;
 import com.vyl.traygame.entities.DialogBox;
 import com.vyl.traygame.entities.Table;
 import com.vyl.traygame.entities.Waiter;
+import com.vyl.traygame.helpers.WaiterObserver;
 
 import java.util.Random;
 
@@ -22,6 +23,7 @@ public class RestaurantScreen extends ScreenAdapter {
     private DelayedRemovalArray<Table> tables;
     private Random random;
     private SpriteBatch batch;
+    private WaiterObserver observer;
 
     public RestaurantScreen() {
         dialogBox = new DialogBox();
@@ -35,11 +37,14 @@ public class RestaurantScreen extends ScreenAdapter {
     public void show() {
         generateCustomers();
         generateTables();
+        observer = new WaiterObserver(this, waiter, customers, tables);
     }
 
     @Override
     public void render(float delta) {
         waiter.update();
+
+        observer.checkWaiter();
 
         batch.begin();
         drawFloor();
@@ -93,12 +98,14 @@ public class RestaurantScreen extends ScreenAdapter {
 
     private void generateCustomers() {
         customers = new DelayedRemovalArray<>();
+        float xSpace = Gdx.graphics.getWidth() - 13 * 5;
+        float ySpace = Gdx.graphics.getHeight() * 0.8f - 29 * 5;
         for (int i = 0; i < 5; i++) {
             customers.add(new Customer(
                     random.nextBoolean(),
                     new Vector2(
-                            random.nextFloat() * Gdx.graphics.getWidth(),
-                            random.nextFloat() * Gdx.graphics.getHeight()
+                            random.nextFloat() * xSpace,
+                            random.nextFloat() * ySpace + Gdx.graphics.getHeight() * 0.2f
                     )
             ));
         }
@@ -106,17 +113,23 @@ public class RestaurantScreen extends ScreenAdapter {
 
     private void generateTables() {
         tables = new DelayedRemovalArray<>();
-        for (int i = 0; i < 5; i++) {
-            tables.add(new Table(
-                    new Vector2(
-                            random.nextFloat() * Gdx.graphics.getWidth(),
-                            random.nextFloat() * Gdx.graphics.getHeight()
-                    )
-            ));
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                tables.add(new Table(
+                        new Vector2(
+                                Gdx.graphics.getWidth() / 3 + i * 300,
+                                Gdx.graphics.getHeight() * 0.3f + j * 250
+                        )
+                ));
+            }
         }
     }
 
     public void keyAction(int keycode, boolean down) {
         waiter.keyAction(keycode, down);
+    }
+
+    public void showDialog(String dialog) {
+        dialogBox.update(dialog);
     }
 }

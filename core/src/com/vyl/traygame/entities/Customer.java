@@ -6,13 +6,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class Customer {
+import java.awt.Rectangle;
 
-    private Vector2 position;
+public class Customer extends Entity {
+
     private Texture texture, shirt;
     private boolean male;
 
     public Customer(boolean male, Vector2 position) {
+        super(new Rectangle(
+                (int) position.x,
+                (int) position.y,
+                13 * 5,
+                29 * 5
+        ));
         this.male = male;
         if (male) {
             texture = new Texture(Gdx.files.internal("guy.png"));
@@ -20,15 +27,14 @@ public class Customer {
         } else {
             texture = new Texture(Gdx.files.internal("girl.png"));
         }
-        this.position = position;
     }
 
     public void render(SpriteBatch batch) {
         batch.setColor(Color.WHITE);
         batch.draw(
                 texture,
-                position.x,
-                position.y,
+                bounds.x,
+                bounds.y,
                 texture.getWidth() * 5,
                 texture.getHeight() * 5
         );
@@ -36,8 +42,8 @@ public class Customer {
             batch.setColor(Color.BLUE);
             batch.draw(
                     shirt,
-                    position.x,
-                    position.y,
+                    bounds.x,
+                    bounds.y,
                     texture.getWidth() * 5,
                     texture.getHeight() * 5
             );

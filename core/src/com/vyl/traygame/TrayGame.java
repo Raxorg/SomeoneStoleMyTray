@@ -2,6 +2,7 @@ package com.vyl.traygame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.vyl.traygame.helpers.InputManager;
 import com.vyl.traygame.screens.MainMenu;
 import com.vyl.traygame.screens.RestaurantScreen;
 

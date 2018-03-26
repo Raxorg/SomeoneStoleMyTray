@@ -7,14 +7,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class Waiter {
+import java.awt.Rectangle;
 
-    private Vector2 position, velocity;
+public class Waiter extends Entity {
+
+    private Vector2 velocity;
     private Texture texture, shirt;
     private boolean facingLeft;
 
     public Waiter() {
-        position = new Vector2();
+        super(new Rectangle(
+                0,
+                (int) (Gdx.graphics.getHeight() * 0.2f),
+                13 * 5,
+                29 * 5
+        ));
         velocity = new Vector2();
         texture = new Texture(Gdx.files.internal("guy.png"));
         shirt = new Texture(Gdx.files.internal("shirt.png"));
@@ -56,7 +63,8 @@ public class Waiter {
     }
 
     public void update() {
-        position.add(velocity);
+        bounds.x += velocity.x;
+        bounds.y += velocity.y;
     }
 
     public void render(SpriteBatch batch) {
@@ -65,8 +73,8 @@ public class Waiter {
         // float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY
         batch.draw(
                 texture,
-                position.x,
-                position.y,
+                bounds.x,
+                bounds.y,
                 texture.getWidth() / 2,
                 texture.getHeight() / 2,
                 texture.getWidth() * 5,
@@ -83,8 +91,8 @@ public class Waiter {
         );
         batch.draw(
                 shirt,
-                position.x,
-                position.y,
+                bounds.x,
+                bounds.y,
                 texture.getWidth() / 2,
                 texture.getHeight() / 2,
                 texture.getWidth() * 5,

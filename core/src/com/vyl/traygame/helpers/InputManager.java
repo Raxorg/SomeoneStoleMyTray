@@ -1,7 +1,8 @@
-package com.vyl.traygame;
+package com.vyl.traygame.helpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.vyl.traygame.TrayGame;
 
 public class InputManager extends InputAdapter {
 
