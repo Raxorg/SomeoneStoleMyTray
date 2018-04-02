@@ -2,10 +2,12 @@ package com.vyl.traygame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import com.vyl.traygame.entities.Action;
 import com.vyl.traygame.entities.Customer;
 import com.vyl.traygame.entities.DialogBox;
 import com.vyl.traygame.entities.Table;
@@ -24,10 +26,11 @@ public class RestaurantScreen extends ScreenAdapter {
     private Random random;
     private SpriteBatch batch;
     private WaiterObserver observer;
+    private boolean showingDialog;
 
     public RestaurantScreen() {
         dialogBox = new DialogBox();
-        waiter = new Waiter();
+        waiter = new Waiter(this);
         floor = new Texture(Gdx.files.internal("floor.png"));
         random = new Random();
         batch = new SpriteBatch();
@@ -35,8 +38,8 @@ public class RestaurantScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        generateCustomers();
         generateTables();
+        generateCustomers(5 + random.nextInt(11));
         observer = new WaiterObserver(this, waiter, customers, tables);
     }
 
@@ -44,7 +47,9 @@ public class RestaurantScreen extends ScreenAdapter {
     public void render(float delta) {
         waiter.update();
 
-        observer.checkWaiter();
+        if (!showingDialog) {
+            observer.checkWaiter();
+        }
 
         batch.begin();
         drawFloor();
@@ -56,6 +61,7 @@ public class RestaurantScreen extends ScreenAdapter {
     }
 
     private void drawFloor() {
+        batch.setColor(Color.WHITE);
         int c = 20;
         int r = c * 3;
         float width = Gdx.graphics.getWidth() / c;
@@ -96,31 +102,51 @@ public class RestaurantScreen extends ScreenAdapter {
         }
     }
 
-    private void generateCustomers() {
-        customers = new DelayedRemovalArray<>();
-        float xSpace = Gdx.graphics.getWidth() - 13 * 5;
-        float ySpace = Gdx.graphics.getHeight() * 0.8f - 29 * 5;
-        for (int i = 0; i < 5; i++) {
-            customers.add(new Customer(
-                    random.nextBoolean(),
-                    new Vector2(
-                            random.nextFloat() * xSpace,
-                            random.nextFloat() * ySpace + Gdx.graphics.getHeight() * 0.2f
-                    )
-            ));
-        }
-    }
-
     private void generateTables() {
         tables = new DelayedRemovalArray<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 tables.add(new Table(
                         new Vector2(
-                                Gdx.graphics.getWidth() / 3 + i * 300,
+                                Gdx.graphics.getWidth() * 0.05f + i * 300,
                                 Gdx.graphics.getHeight() * 0.3f + j * 250
                         )
                 ));
+            }
+        }
+    }
+
+    private void generateCustomers(int quantity) {
+        if (quantity > tables.size * 2) {
+            return;
+        }
+        customers = new DelayedRemovalArray<>();
+        for (int i = 0; i < quantity; i++) {
+            boolean male = random.nextBoolean();
+            boolean customerAssigned = false;
+            while (!customerAssigned) {
+                int randomTableIndex = random.nextInt(tables.size - 1);
+                if (!tables.get(randomTableIndex).isFull()) {
+                    Customer customer = new Customer(
+                            this,
+                            male,
+                            tables.get(randomTableIndex).getPosition()
+                    );
+                    boolean leftChair = random.nextBoolean();
+                    if (tables.get(randomTableIndex).chairFree(leftChair)) {
+                        tables.get(randomTableIndex).sitCustomer(
+                                customer,
+                                leftChair
+                        );
+                    } else {
+                        tables.get(randomTableIndex).sitCustomer(
+                                customer,
+                                !leftChair
+                        );
+                    }
+                    customers.add(customer);
+                    customerAssigned = true;
+                }
             }
         }
     }
@@ -130,6 +156,14 @@ public class RestaurantScreen extends ScreenAdapter {
     }
 
     public void showDialog(String dialog) {
+        showingDialog = true;
         dialogBox.update(dialog);
+        dialogBox.setVisible(true);
+        waiter.setAction(Action.TALKING);
+    }
+
+    public void hideDialog() {
+        showingDialog = false;
+        dialogBox.setVisible(false);
     }
 }

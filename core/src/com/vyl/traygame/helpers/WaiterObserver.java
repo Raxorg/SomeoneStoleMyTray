@@ -1,7 +1,9 @@
 package com.vyl.traygame.helpers;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.vyl.traygame.entities.Customer;
+import com.vyl.traygame.entities.Interaction;
 import com.vyl.traygame.entities.Table;
 import com.vyl.traygame.entities.Waiter;
 import com.vyl.traygame.screens.RestaurantScreen;
@@ -25,9 +27,11 @@ public class WaiterObserver {
     public void checkWaiter() {
         for (Customer c : customers) {
             if (waiter.getBounds().intersects(c.getBounds())) {
-                restaurantScreen.showDialog("Hello handsome ;)");
-                break;
+                waiter.showPossibleInteraction(Input.Keys.A, Interaction.TALK, c);
+                return;
             }
         }
+        waiter.setInteractionIsPossible(false);
+        restaurantScreen.hideDialog();
     }
 }

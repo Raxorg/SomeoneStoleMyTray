@@ -13,4 +13,6 @@ public abstract class Entity {
     public Rectangle getBounds() {
         return bounds;
     }
+
+    public abstract void interact(Interaction interaction);
 }

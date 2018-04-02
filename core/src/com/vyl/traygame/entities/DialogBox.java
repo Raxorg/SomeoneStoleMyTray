@@ -13,6 +13,7 @@ public class DialogBox {
     private Texture pixel;
     private BitmapFont font;
     private float fontWidth, fontHeight;
+    private boolean visible;
 
     public DialogBox() {
         dialog = "";
@@ -22,7 +23,14 @@ public class DialogBox {
     }
 
     public void render(SpriteBatch batch) {
-        batch.setColor(Color.WHITE);
+        if (visible) {
+            renderBorders(batch);
+            renderText(batch);
+        }
+    }
+
+    private void renderBorders(SpriteBatch batch) {
+        batch.setColor(Color.GRAY);
         // LEFT
         batch.draw(
                 pixel,
@@ -99,7 +107,9 @@ public class DialogBox {
                 false,
                 false
         );
+    }
 
+    private void renderText(SpriteBatch batch) {
         font.draw(
                 batch,
                 dialog,
@@ -113,5 +123,9 @@ public class DialogBox {
         GlyphLayout glyph = new GlyphLayout(font, dialog);
         fontWidth = glyph.width;
         fontHeight = glyph.height;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }
