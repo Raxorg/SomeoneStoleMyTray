@@ -20,7 +20,7 @@ public class RestaurantScreen extends ScreenAdapter {
 
     private DialogBox dialogBox;
     private Waiter waiter;
-    private Texture floor;
+    private Texture floor, wall;
     private DelayedRemovalArray<Customer> customers;
     private DelayedRemovalArray<Table> tables;
     private Random random;
@@ -29,9 +29,10 @@ public class RestaurantScreen extends ScreenAdapter {
     private boolean showingDialog;
 
     public RestaurantScreen() {
-        dialogBox = new DialogBox();
+        dialogBox = new DialogBox(Gdx.graphics.getHeight() * 0.18f);
         waiter = new Waiter(this);
         floor = new Texture(Gdx.files.internal("floor.png"));
+        wall = new Texture(Gdx.files.internal("wall.png"));
         random = new Random();
         batch = new SpriteBatch();
     }
@@ -53,8 +54,9 @@ public class RestaurantScreen extends ScreenAdapter {
 
         batch.begin();
         drawFloor();
-        drawCustomers();
+        drawWall();
         waiter.render(batch);
+        drawCustomers();
         drawTables();
         dialogBox.render(batch);
         batch.end();
@@ -90,6 +92,17 @@ public class RestaurantScreen extends ScreenAdapter {
         }
     }
 
+    private void drawWall() {
+        float height = 250;
+        batch.draw(
+                wall,
+                0,
+                Gdx.graphics.getHeight() - height,
+                Gdx.graphics.getWidth(),
+                height
+        );
+    }
+
     private void drawCustomers() {
         for (Customer c : customers) {
             c.render(batch);
@@ -109,7 +122,7 @@ public class RestaurantScreen extends ScreenAdapter {
                 tables.add(new Table(
                         new Vector2(
                                 Gdx.graphics.getWidth() * 0.05f + i * 300,
-                                Gdx.graphics.getHeight() * 0.3f + j * 250
+                                Gdx.graphics.getHeight() * 0.2f + j * 250
                         )
                 ));
             }

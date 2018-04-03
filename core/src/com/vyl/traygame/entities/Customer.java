@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.vyl.traygame.screens.RestaurantScreen;
-
-import java.awt.Rectangle;
 
 public class Customer extends Entity {
 
@@ -82,7 +81,7 @@ public class Customer extends Entity {
     }
 
     public void setPosition(Vector2 position) {
-        bounds.setBounds(new Rectangle(
+        bounds.set(new Rectangle(
                 (int) position.x,
                 (int) position.y,
                 13 * 5,

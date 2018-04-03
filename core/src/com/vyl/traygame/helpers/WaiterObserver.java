@@ -1,6 +1,7 @@
 package com.vyl.traygame.helpers;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.vyl.traygame.entities.Customer;
 import com.vyl.traygame.entities.Interaction;
@@ -25,10 +26,20 @@ public class WaiterObserver {
     }
 
     public void checkWaiter() {
+        Rectangle waiterBounds = waiter.getBounds();
         for (Customer c : customers) {
-            if (waiter.getBounds().intersects(c.getBounds())) {
+            if (waiterBounds.overlaps(c.getBounds())) {
                 waiter.showPossibleInteraction(Input.Keys.A, Interaction.TALK, c);
                 return;
+            }
+        }
+        for (Table t : tables) {
+            if (waiterBounds.x + waiterBounds.width > t.getBounds().x &&
+                    waiterBounds.x + waiterBounds.width <= t.getBounds().x + 5) {
+                waiter.setPosition(
+                        waiter.getPosition().x - 5,
+                        waiter.getPosition().y
+                );
             }
         }
         waiter.setInteractionIsPossible(false);

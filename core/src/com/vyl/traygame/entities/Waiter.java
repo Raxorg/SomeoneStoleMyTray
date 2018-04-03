@@ -5,18 +5,17 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.vyl.traygame.hud.InteractionBubble;
 import com.vyl.traygame.screens.RestaurantScreen;
-
-import java.awt.Rectangle;
 
 public class Waiter extends Entity {
 
     private RestaurantScreen restaurantScreen;
     private Vector2 velocity;
     private Texture texture, shirt;
-    private boolean facingLeft, interactionIsPossible;
+    private boolean facingLeft, interactionIsPossible, interacting;
     private int interactionKey;
     private Interaction interaction;
     private Entity interactable;
@@ -42,40 +41,88 @@ public class Waiter extends Entity {
             if (keycode == Input.Keys.B) {
                 restaurantScreen.hideDialog();
                 action = Action.WALKING;
+                interacting = false;
             } else {
                 return;
             }
         }
 
-        switch (keycode) {
-            case Input.Keys.UP:
-                if (down)
-                    velocity.y += 5;
-                else
-                    velocity.y -= 5;
-                break;
-            case Input.Keys.LEFT:
-                if (down)
-                    velocity.x -= 5;
-                else
-                    velocity.x += 5;
-                break;
-            case Input.Keys.DOWN:
-                if (down)
-                    velocity.y -= 5;
-                else
-                    velocity.y += 5;
-                break;
-            case Input.Keys.RIGHT:
-                if (down)
-                    velocity.x += 5;
-                else
-                    velocity.x -= 5;
-                break;
-        };
+        handleArrows(keycode, down);
+
         if (keycode == interactionKey && !down) {
             interactable.interact(interaction);
+            interacting = true;
         }
+
+        updateFacingDirection();
+    }
+
+    private void handleArrows(int keycode, boolean down) {
+        switch (keycode) {
+            case Input.Keys.UP:
+                if (down) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                        velocity.y = 0;
+                    } else {
+                        velocity.y = 5;
+                    }
+                } else {
+                    if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                        velocity.y = -5;
+                    } else {
+                        velocity.y = 0;
+                    }
+                }
+                break;
+            case Input.Keys.LEFT:
+                if (down) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                        velocity.x = 0;
+                    } else {
+                        velocity.x = -5;
+                    }
+                } else {
+                    if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                        velocity.x = 5;
+                    } else {
+                        velocity.x = 0;
+                    }
+                }
+                break;
+            case Input.Keys.DOWN:
+                if (down) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                        velocity.y = 0;
+                    } else {
+                        velocity.y = -5;
+                    }
+                } else {
+                    if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                        velocity.y = 5;
+                    } else {
+                        velocity.y = 0;
+                    }
+                }
+                break;
+            case Input.Keys.RIGHT:
+                if (down) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                        velocity.x = 0;
+                    } else {
+                        velocity.x = 5;
+                    }
+                } else {
+                    if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                        velocity.x = -5;
+                    } else {
+                        velocity.x = 0;
+                    }
+                }
+                break;
+        }
+    }
+
+    private void updateFacingDirection() {
         if (velocity.x > 0) {
             facingLeft = false;
         }
@@ -91,7 +138,7 @@ public class Waiter extends Entity {
 
     public void render(SpriteBatch batch) {
         drawWaiter(batch);
-        if (interactionIsPossible) {
+        if (interactionIsPossible && !interacting) {
             interactionBubble.render(batch, interactionKey);
         }
     }
@@ -159,6 +206,13 @@ public class Waiter extends Entity {
     }
 
     public void setAction(Action action) {
+        switch (action) {
+            case WALKING:
+                break;
+            case TALKING:
+                velocity.set(0, 0);
+                break;
+        }
         this.action = action;
     }
 }

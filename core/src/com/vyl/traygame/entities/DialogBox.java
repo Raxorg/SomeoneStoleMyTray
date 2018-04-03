@@ -12,14 +12,15 @@ public class DialogBox {
     private String dialog;
     private Texture pixel;
     private BitmapFont font;
-    private float fontWidth, fontHeight;
+    private float fontWidth, fontHeight, height;
     private boolean visible;
 
-    public DialogBox() {
+    public DialogBox(float height) {
         dialog = "";
         pixel = new Texture(Gdx.files.internal("pixel.png"));
         font = new BitmapFont();
         font.getData().scale(3);
+        this.height = height;
     }
 
     public void render(SpriteBatch batch) {
@@ -39,7 +40,7 @@ public class DialogBox {
                 pixel.getWidth() / 2,
                 pixel.getHeight() / 2,
                 10,
-                Gdx.graphics.getHeight() * 0.2f,
+                height,
                 1,
                 1,
                 0,
@@ -58,7 +59,7 @@ public class DialogBox {
                 pixel.getWidth() / 2,
                 pixel.getHeight() / 2,
                 10,
-                Gdx.graphics.getHeight() * 0.2f,
+                height,
                 1,
                 1,
                 0,
@@ -73,7 +74,7 @@ public class DialogBox {
         batch.draw(
                 pixel,
                 0,
-                Gdx.graphics.getHeight() * 0.2f,
+                height,
                 pixel.getWidth() / 2,
                 pixel.getHeight() / 2,
                 Gdx.graphics.getWidth(),
