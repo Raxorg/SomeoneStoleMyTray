@@ -4,18 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.vyl.traygame.entities.Waiter;
+import com.vyl.traygame.entities.Customer;
 
 public class InteractionBubble {
 
-    private Waiter waiter;
     private Texture pressA1, pressA2, current;
     private float time, xPosition;
+    private Customer customer;
 
-    public InteractionBubble(Waiter waiter) {
-        this.waiter = waiter;
+    public InteractionBubble() {
         pressA1 = new Texture("pressA1.png");
         pressA2 = new Texture("pressA2.png");
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public void render(SpriteBatch batch, int interactionKey) {
@@ -23,25 +26,25 @@ public class InteractionBubble {
         batch.setColor(Color.WHITE);
         time += Gdx.graphics.getDeltaTime();
         // Current color
-        if (time <= 1) {
+        if (time <= 0.5f) {
             current = pressA2;
-        } else if (time <= 2) {
+        } else if (time <= 1) {
             current = pressA1;
         } else {
-            time = time - 2;
+            time = time - 1;
             current = pressA2;
         }
         // Position according to where the waiter is facing
-        if (waiter.isFacingLeft()) {
-            xPosition = waiter.getBounds().x + waiter.getBounds().width;
+        if (customer.isFacingLeft()) {
+            xPosition = customer.getBounds().x + customer.getBounds().width;
         } else {
-            xPosition = waiter.getBounds().x - waiter.getBounds().width * 1.5f;
+            xPosition = customer.getBounds().x - customer.getBounds().width * 1.5f;
         }
         // Draw the action bubble
         batch.draw(
                 current,
                 xPosition,
-                waiter.getBounds().y + waiter.getBounds().height,
+                customer.getBounds().y + customer.getBounds().height,
                 current.getWidth() / 2,
                 current.getHeight() / 2,
                 current.getWidth(),
@@ -53,7 +56,7 @@ public class InteractionBubble {
                 0,
                 current.getWidth(),
                 current.getHeight(),
-                !waiter.isFacingLeft(),
+                !customer.isFacingLeft(),
                 false
         );
     }

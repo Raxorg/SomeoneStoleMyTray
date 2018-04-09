@@ -9,27 +9,43 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Table extends Entity {
 
-    private Texture texture;
+    private Texture table, toppings;
     private Customer left, right;
 
     public Table(Vector2 position) {
-        super(new Rectangle(
-                (int) position.x,
-                (int) position.y,
-                17 * 8,
-                12 * 8
-        ));
-        texture = new Texture(Gdx.files.internal("table.png"));
+        super(
+                "Table",
+                new Rectangle(
+                        (int) position.x,
+                        (int) position.y,
+                        17 * 8,
+                        12 * 8
+                ),
+                new Texture("table.png")
+        );
+        table = new Texture("table.png");
+        toppings = new Texture("toppings.png");
     }
 
     public void render(SpriteBatch batch) {
         batch.setColor(Color.WHITE);
         batch.draw(
-                texture,
+                table,
                 bounds.x,
                 bounds.y,
-                texture.getWidth() * 8,
-                texture.getHeight() * 8
+                table.getWidth() * 8,
+                table.getHeight() * 8
+        );
+    }
+
+    public void renderToppings(SpriteBatch batch) {
+        batch.setColor(Color.WHITE);
+        batch.draw(
+                toppings,
+                bounds.x,
+                bounds.y,
+                table.getWidth() * 8,
+                table.getHeight() * 8
         );
     }
 
@@ -45,7 +61,7 @@ public class Table extends Entity {
             this.right = customer;
             float width = customer.isMale() ? 13 * 5 : 11 * 5;
             customer.setPosition(new Vector2(
-                    bounds.x + texture.getWidth() * 8 - width,
+                    bounds.x + table.getWidth() * 8 - width,
                     bounds.y
             ));
             customer.setFacingDirection(true);

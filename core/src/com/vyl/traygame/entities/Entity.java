@@ -1,14 +1,19 @@
 package com.vyl.traygame.entities;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
 
-    protected Rectangle bounds;
+    private String name;
+    Rectangle bounds;
+    private Texture image;
 
-    protected Entity(Rectangle bounds) {
+    Entity(String name, Rectangle bounds, Texture image) {
+        this.name = name;
         this.bounds = bounds;
+        this.image = image;
     }
 
     public Rectangle getBounds() {
@@ -23,5 +28,13 @@ public abstract class Entity {
 
     public Vector2 getPosition() {
         return new Vector2(bounds.x, bounds.y);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Texture getImage() {
+        return image;
     }
 }

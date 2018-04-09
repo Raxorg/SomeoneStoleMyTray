@@ -1,4 +1,4 @@
-package com.vyl.traygame.screens;
+package com.vyl.traygame.screens.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.vyl.traygame.TrayGame;
 import com.vyl.traygame.hud.Button;
+import com.vyl.traygame.screens.restaurant.RestaurantStuff;
 
 import java.util.ArrayList;
 
-public class MainMenu extends ScreenAdapter {
+public class MainMenuStuff extends ScreenAdapter {
 
     private SpriteBatch batch;
     private BitmapFont font;
@@ -20,7 +21,7 @@ public class MainMenu extends ScreenAdapter {
     private float time;
     private TrayGame game;
 
-    public MainMenu(final TrayGame game) {
+    public MainMenuStuff(final TrayGame game) {
         bg1 = new Texture(Gdx.files.internal("bg1.png"));
         bg2 = new Texture(Gdx.files.internal("bg2.png"));
         button = new Texture(Gdx.files.internal("button.png"));
@@ -39,7 +40,7 @@ public class MainMenu extends ScreenAdapter {
         ) {
             @Override
             public void onAction() {
-                game.setScreen(new RestaurantScreen());
+                game.setScreen(new RestaurantStuff());
             }
         });
     }
@@ -86,7 +87,9 @@ public class MainMenu extends ScreenAdapter {
 
     @Override
     public void dispose() {
-
+        bg1.dispose();
+        bg2.dispose();
+        button.dispose();
     }
 
     public void touchDown(float screenX, float screenY) {

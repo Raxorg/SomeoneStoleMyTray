@@ -4,80 +4,124 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.vyl.traygame.screens.RestaurantScreen;
+import com.vyl.traygame.screens.restaurant.RestaurantObserver;
 
 public class Customer extends Entity {
 
-    private RestaurantScreen restaurantScreen;
-    private Texture texture, shirt;
+    private RestaurantObserver restaurantObserver;
+    private TextureRegion top, bottom, shirtTop, shirtBottom;
     private boolean male, facingLeft;
     private String dialog;
+    private Rectangle dialogBounds;
 
-    public Customer(RestaurantScreen restaurantScreen, boolean male, Vector2 position) {
-        super(new Rectangle(
-                (int) position.x,
-                (int) position.y,
-                13 * 5,
-                29 * 5
-        ));
-        this.restaurantScreen = restaurantScreen;
+    public Customer(String name, RestaurantObserver restaurantObserver,
+                    boolean male, Vector2 position) {
+        super(
+                name,
+                new Rectangle(
+                        (int) position.x,
+                        (int) position.y,
+                        13 * 5,
+                        29 * 5
+                ),
+                male ? new Texture("guyImage.png") : new Texture("girlImage.png")
+        );
+        dialogBounds = new Rectangle(
+                (int) position.x - 10,
+                (int) position.y - 10,
+                13 * 5 + 20,
+                29 * 5 + 20
+        );
+        this.restaurantObserver = restaurantObserver;
         this.male = male;
         if (male) {
-            texture = new Texture(Gdx.files.internal("guy.png"));
-            shirt = new Texture(Gdx.files.internal("shirt.png"));
+            Texture guy = new Texture(Gdx.files.internal("guy.png"));
+            Texture shirt = new Texture(Gdx.files.internal("shirt.png"));
+            top = new TextureRegion(guy, 0, 0, 13, 15);
+            bottom = new TextureRegion(guy, 0, 14, 13, 14);
+            shirtTop = new TextureRegion(shirt, 0, 0, 13, 15);
+            shirtBottom = new TextureRegion(shirt, 0, 14, 13, 14);
         } else {
-            texture = new Texture(Gdx.files.internal("girl.png"));
+            Texture girl = new Texture(Gdx.files.internal("girl.png"));
+            top = new TextureRegion(girl, 0, 0, 11, 14);
+            bottom = new TextureRegion(girl, 0, 14, 11, 14);
         }
         dialog = "Your code works lol";
     }
 
-    public void render(SpriteBatch batch) {
+    public void renderTop(SpriteBatch batch) {
         batch.setColor(Color.WHITE);
         batch.draw(
-                texture,
+                top,
                 bounds.x,
-                bounds.y,
-                texture.getWidth() / 2,
-                texture.getHeight() / 2,
-                texture.getWidth() * 5,
-                texture.getHeight() * 5,
+                bounds.y + 14.5f * 5,
+                top.getRegionWidth() / 2,
+                top.getRegionHeight() / 2,
+                top.getRegionWidth() * 5,
+                top.getRegionHeight() * 5,
                 1,
                 1,
-                0,
-                0,
-                0,
-                texture.getWidth(),
-                texture.getHeight(),
-                facingLeft,
-                false
+                0
         );
         if (male) {
             batch.setColor(Color.BLUE);
             batch.draw(
-                    shirt,
+                    shirtTop,
+                    bounds.x,
+                    bounds.y + 14.5f * 5,
+                    shirtTop.getRegionWidth() / 2,
+                    shirtTop.getRegionHeight() / 2,
+                    shirtTop.getRegionWidth() * 5,
+                    shirtTop.getRegionHeight() * 5,
+                    1,
+                    1,
+                    0
+            );
+        }
+    }
+
+    public void renderBottom(SpriteBatch batch) {
+        batch.setColor(Color.WHITE);
+        batch.draw(
+                bottom,
+                bounds.x,
+                bounds.y,
+                bottom.getRegionWidth() / 2,
+                bottom.getRegionHeight() / 2,
+                bottom.getRegionWidth() * 5,
+                bottom.getRegionHeight() * 5,
+                1,
+                1,
+                0
+        );
+        if (male) {
+            batch.setColor(Color.BLUE);
+            batch.draw(
+                    shirtBottom,
                     bounds.x,
                     bounds.y,
-                    texture.getWidth() / 2,
-                    texture.getHeight() / 2,
-                    texture.getWidth() * 5,
-                    texture.getHeight() * 5,
+                    shirtBottom.getRegionWidth() / 2,
+                    shirtBottom.getRegionHeight() / 2,
+                    shirtBottom.getRegionWidth() * 5,
+                    shirtBottom.getRegionHeight() * 5,
                     1,
                     1,
-                    0,
-                    0,
-                    0,
-                    texture.getWidth(),
-                    texture.getHeight(),
-                    facingLeft,
-                    false
+                    0
             );
         }
     }
 
     public void setFacingDirection(boolean left) {
         facingLeft = left;
+        top.flip(facingLeft, false);
+        bottom.flip(facingLeft, false);
+        if (male) {
+            shirtTop.flip(facingLeft, false);
+            shirtBottom.flip(facingLeft, false);
+        }
     }
 
     public void setPosition(Vector2 position) {
@@ -87,6 +131,16 @@ public class Customer extends Entity {
                 13 * 5,
                 29 * 5
         ));
+        dialogBounds.set(new Rectangle(
+                (int) position.x - 10,
+                (int) position.y - 10,
+                13 * 5 + 20,
+                29 * 5 + 20
+        ));
+    }
+
+    public boolean isFacingLeft() {
+        return facingLeft;
     }
 
     public boolean isMale() {
@@ -97,8 +151,12 @@ public class Customer extends Entity {
     public void interact(Interaction interaction) {
         switch (interaction) {
             case TALK:
-                restaurantScreen.showDialog(dialog);
+                restaurantObserver.showDialog(this, dialog);
                 break;
         }
+    }
+
+    public Rectangle getDialogBounds() {
+        return dialogBounds;
     }
 }

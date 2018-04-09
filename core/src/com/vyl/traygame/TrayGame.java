@@ -2,30 +2,29 @@ package com.vyl.traygame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.vyl.traygame.helpers.Constants;
 import com.vyl.traygame.helpers.InputManager;
-import com.vyl.traygame.screens.MainMenu;
-import com.vyl.traygame.screens.RestaurantScreen;
+import com.vyl.traygame.screens.mainmenu.MainMenuStuff;
+import com.vyl.traygame.screens.restaurant.RestaurantStuff;
 
 public class TrayGame extends Game {
 
-    private MainMenu mainMenu;
-
     @Override
     public void create() {
-        mainMenu = new MainMenu(this);
-        setScreen(mainMenu);
+        Constants.init();
+        setScreen(new MainMenuStuff(this));
         Gdx.input.setInputProcessor(new InputManager(this));
     }
 
     public void touchDown(float screenX, float screenY) {
-        if (screen instanceof MainMenu) {
-            mainMenu.touchDown(screenX, screenY);
+        if (screen instanceof MainMenuStuff) {
+            ((MainMenuStuff) screen).touchDown(screenX, screenY);
         }
     }
 
     public void keyAction(int keycode, boolean down) {
-        if (screen instanceof RestaurantScreen) {
-            ((RestaurantScreen) screen).keyAction(keycode, down);
+        if (screen instanceof RestaurantStuff) {
+            ((RestaurantStuff) screen).keyAction(keycode, down);
         }
     }
 }

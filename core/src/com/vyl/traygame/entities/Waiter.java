@@ -7,57 +7,32 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.vyl.traygame.hud.InteractionBubble;
-import com.vyl.traygame.screens.RestaurantScreen;
+import com.vyl.traygame.helpers.Constants;
 
 public class Waiter extends Entity {
 
-    private RestaurantScreen restaurantScreen;
     private Vector2 velocity;
     private Texture texture, shirt;
-    private boolean facingLeft, interactionIsPossible, interacting;
-    private int interactionKey;
-    private Interaction interaction;
-    private Entity interactable;
-    private InteractionBubble interactionBubble;
+    private boolean facingLeft;
     private Action action;
 
-    public Waiter(RestaurantScreen restaurantScreen) {
-        super(new Rectangle(
-                0,
-                (int) (Gdx.graphics.getHeight() * 0.2f),
-                13 * 5,
-                29 * 5
-        ));
-        this.restaurantScreen = restaurantScreen;
+    public Waiter() {
+        super(
+                "Sveen",
+                new Rectangle(
+                        0,
+                        (int) (Gdx.graphics.getHeight() * 0.2f),
+                        13 * 5,
+                        29 * 5 / 2
+                ), new Texture("waiterImage.png")
+        );
         velocity = new Vector2();
         texture = new Texture(Gdx.files.internal("guy.png"));
         shirt = new Texture(Gdx.files.internal("shirt.png"));
-        interactionBubble = new InteractionBubble(this);
+        action = Action.WALKING;
     }
 
-    public void keyAction(int keycode, boolean down) {
-        if (action == Action.TALKING) {
-            if (keycode == Input.Keys.B) {
-                restaurantScreen.hideDialog();
-                action = Action.WALKING;
-                interacting = false;
-            } else {
-                return;
-            }
-        }
-
-        handleArrows(keycode, down);
-
-        if (keycode == interactionKey && !down) {
-            interactable.interact(interaction);
-            interacting = true;
-        }
-
-        updateFacingDirection();
-    }
-
-    private void handleArrows(int keycode, boolean down) {
+    public void handleArrows(int keycode, boolean down) {
         switch (keycode) {
             case Input.Keys.UP:
                 if (down) {
@@ -122,7 +97,7 @@ public class Waiter extends Entity {
         }
     }
 
-    private void updateFacingDirection() {
+    public void updateFacingDirection() {
         if (velocity.x > 0) {
             facingLeft = false;
         }
@@ -134,13 +109,15 @@ public class Waiter extends Entity {
     public void update() {
         bounds.x += velocity.x;
         bounds.y += velocity.y;
+
+        bounds.x = Math.max(bounds.x, 0);
+        bounds.x = Math.min(bounds.x, Gdx.graphics.getWidth() - 13 * 5);
+        bounds.y = Math.max(bounds.y, 0);
+        bounds.y = Math.min(bounds.y, Gdx.graphics.getHeight() - Constants.WALL_HEIGHT - 15);
     }
 
     public void render(SpriteBatch batch) {
         drawWaiter(batch);
-        if (interactionIsPossible && !interacting) {
-            interactionBubble.render(batch, interactionKey);
-        }
     }
 
     private void drawWaiter(SpriteBatch batch) {
@@ -185,24 +162,9 @@ public class Waiter extends Entity {
         );
     }
 
-    public void showPossibleInteraction(int key, Interaction interaction, Entity interactable) {
-        interactionKey = key;
-        this.interaction = interaction;
-        this.interactable = interactable;
-        interactionIsPossible = true;
-    }
-
-    public void setInteractionIsPossible(boolean interactionIsPossible) {
-        this.interactionIsPossible = interactionIsPossible;
-    }
-
     @Override
     public void interact(Interaction interaction) {
-        // TODO something with restaurantScreen
-    }
-
-    public boolean isFacingLeft() {
-        return facingLeft;
+        // TODO something with restaurantStuff
     }
 
     public void setAction(Action action) {
@@ -214,5 +176,22 @@ public class Waiter extends Entity {
                 break;
         }
         this.action = action;
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public Rectangle getFullBounds() {
+        return new Rectangle(
+                bounds.x,
+                bounds.y,
+                bounds.width,
+                bounds.height * 2
+        );
     }
 }
