@@ -135,7 +135,6 @@ public class RestaurantStuff extends ScreenAdapter {
                         case START:
                             // TODO SHOW OPTIONS
                             observer.showDialog(dialogManager.getCurrentDialog());
-                            System.out.println(dialogManager.getCurrentDialog().getText());
                             break;
                         case OPTION:
                             // TODO SHOW ANSWER
