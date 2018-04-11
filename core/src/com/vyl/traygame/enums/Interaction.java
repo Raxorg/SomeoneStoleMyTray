@@ -1,4 +1,4 @@
-package com.vyl.traygame.entities;
+package com.vyl.traygame.enums;
 
 public enum Interaction {
     TALK,

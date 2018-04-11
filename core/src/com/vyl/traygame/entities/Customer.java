@@ -7,18 +7,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.vyl.traygame.screens.restaurant.RestaurantObserver;
+import com.vyl.traygame.enums.Interaction;
+import com.vyl.traygame.screens.restaurant.RestaurantStuff;
 
 public class Customer extends Entity {
 
-    private RestaurantObserver restaurantObserver;
+    private RestaurantStuff restaurantStuff;
     private TextureRegion top, bottom, shirtTop, shirtBottom;
     private boolean male, facingLeft;
-    private String dialog;
     private Rectangle dialogBounds;
+    private int index;
 
-    public Customer(String name, RestaurantObserver restaurantObserver,
-                    boolean male, Vector2 position) {
+    public Customer(String name, RestaurantStuff restaurantStuff,
+                    boolean male, Vector2 position, int index) {
         super(
                 name,
                 new Rectangle(
@@ -35,7 +36,7 @@ public class Customer extends Entity {
                 13 * 5 + 20,
                 29 * 5 + 20
         );
-        this.restaurantObserver = restaurantObserver;
+        this.restaurantStuff = restaurantStuff;
         this.male = male;
         if (male) {
             Texture guy = new Texture(Gdx.files.internal("guy.png"));
@@ -49,7 +50,7 @@ public class Customer extends Entity {
             top = new TextureRegion(girl, 0, 0, 11, 14);
             bottom = new TextureRegion(girl, 0, 14, 11, 14);
         }
-        dialog = "Your code works lol";
+        this.index = index;
     }
 
     public void renderTop(SpriteBatch batch) {
@@ -151,7 +152,7 @@ public class Customer extends Entity {
     public void interact(Interaction interaction) {
         switch (interaction) {
             case TALK:
-                restaurantObserver.showDialog(this, dialog);
+                restaurantStuff.startDialog(index);
                 break;
         }
     }

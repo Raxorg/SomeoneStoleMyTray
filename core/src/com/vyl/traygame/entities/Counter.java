@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.vyl.traygame.enums.Interaction;
 import com.vyl.traygame.helpers.Constants;
 
 public class Counter extends Entity {

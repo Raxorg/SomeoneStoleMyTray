@@ -3,6 +3,7 @@ package com.vyl.traygame.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.vyl.traygame.enums.Interaction;
 
 public abstract class Entity {
 

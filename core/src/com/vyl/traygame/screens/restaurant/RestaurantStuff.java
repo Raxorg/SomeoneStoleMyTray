@@ -6,14 +6,15 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
-import com.vyl.traygame.entities.Action;
 import com.vyl.traygame.entities.Counter;
 import com.vyl.traygame.entities.Customer;
 import com.vyl.traygame.entities.DialogBox;
 import com.vyl.traygame.entities.Entity;
-import com.vyl.traygame.entities.Interaction;
 import com.vyl.traygame.entities.Table;
 import com.vyl.traygame.entities.Waiter;
+import com.vyl.traygame.enums.Action;
+import com.vyl.traygame.enums.Interaction;
+import com.vyl.traygame.helpers.DialogManager;
 import com.vyl.traygame.hud.InteractionBubble;
 
 import java.util.Random;
@@ -34,6 +35,7 @@ public class RestaurantStuff extends ScreenAdapter {
     private int interactionKey;
     private Interaction interaction;
     private Entity interactable;
+    private DialogManager dialogManager;
 
     public RestaurantStuff() {
         random = new Random();
@@ -49,6 +51,8 @@ public class RestaurantStuff extends ScreenAdapter {
         generateCustomers();
 
         interactionBubble = new InteractionBubble();
+
+        dialogManager = new DialogManager(this);
     }
 
     @Override
@@ -78,9 +82,10 @@ public class RestaurantStuff extends ScreenAdapter {
         customers = new DelayedRemovalArray<>();
         customers.add(new Customer(
                 "Fred",
-                observer,
+                this,
                 true,
-                new Vector2()
+                new Vector2(),
+                0
         ));
         for (Customer customer : customers) {
             boolean customerAssigned = false;
@@ -121,13 +126,38 @@ public class RestaurantStuff extends ScreenAdapter {
 
     public void keyAction(int keycode, boolean down) {
         if (waiter.getAction() == Action.TALKING) {
-            if (keycode == Input.Keys.B) {
-                observer.hideDialog();
-                waiter.setAction(Action.WALKING);
-                interacting = false;
-            } else {
+            if(down) {
                 return;
             }
+            switch (keycode) {
+                case Input.Keys.A:
+                    switch (dialogManager.getCurrentDialog().getType()) {
+                        case START:
+                            // TODO SHOW OPTIONS
+                            observer.showDialog(dialogManager.getCurrentDialog());
+                            System.out.println(dialogManager.getCurrentDialog().getText());
+                            break;
+                        case OPTION:
+                            // TODO SHOW ANSWER
+                            break;
+                        case ANSWER:
+                            // TODO SHOW OPTIONS
+                            break;
+                        case GAME_OVER:
+                            // TODO SHOW GAME OVER SCREEN
+                            break;
+                        case END:
+                            // TODO END CONVERSATION
+                            break;
+                    }
+                    break;
+                case Input.Keys.B:
+                    observer.hideDialog();
+                    waiter.setAction(Action.WALKING);
+                    interacting = false;
+                    break;
+            }
+            return;
         }
 
         waiter.handleArrows(keycode, down);
@@ -178,5 +208,10 @@ public class RestaurantStuff extends ScreenAdapter {
 
     public Counter getCounter() {
         return counter;
+    }
+
+    public void startDialog(int index) {
+        observer.showDialog(waiter.getGreetingsDialog());
+        dialogManager.setDialog(index);
     }
 }

@@ -2,16 +2,17 @@ package com.vyl.traygame.screens.restaurant;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
-import com.vyl.traygame.entities.Action;
 import com.vyl.traygame.entities.Customer;
-import com.vyl.traygame.entities.Entity;
-import com.vyl.traygame.entities.Interaction;
 import com.vyl.traygame.entities.Table;
+import com.vyl.traygame.enums.Action;
+import com.vyl.traygame.enums.Interaction;
+import com.vyl.traygame.helpers.Dialog;
 
 public class RestaurantObserver {
 
     private RestaurantStuff stuff;
     private boolean showingDialog;
+    private float time;
 
     public RestaurantObserver(RestaurantStuff stuff) {
         this.stuff = stuff;
@@ -22,12 +23,21 @@ public class RestaurantObserver {
 
         if (!showingDialog) {
             checkWaiter();
+        } else {
+
         }
     }
 
-    public void showDialog(Entity speaker, String dialog) {
+    public void showDialog(Dialog dialog) {
         showingDialog = true;
-        stuff.getDialogBox().update(speaker, dialog);
+        stuff.getDialogBox().update(dialog.getEntity(), dialog.getText());
+        stuff.getDialogBox().setVisible(true);
+        stuff.getWaiter().setAction(Action.TALKING);
+    }
+
+    public void showOptions(Dialog option1, Dialog option2) {
+        showingDialog = true;
+        stuff.getDialogBox().update(stuff.getWaiter(), option1.getText(), option2.getText());
         stuff.getDialogBox().setVisible(true);
         stuff.getWaiter().setAction(Action.TALKING);
     }
@@ -39,6 +49,12 @@ public class RestaurantObserver {
 
     public void checkWaiter() {
         Rectangle waiterBounds = stuff.getWaiter().getBounds();
+        checkTables(waiterBounds);
+        checkInteractions(waiterBounds);
+        checkCounter(waiterBounds);
+    }
+
+    private void checkTables(Rectangle waiterBounds) {
         for (Table t : stuff.getTables()) {
             if (waiterBounds.overlaps(t.getBounds())) {
                 stuff.getWaiter().setPosition(
@@ -47,6 +63,9 @@ public class RestaurantObserver {
                 );
             }
         }
+    }
+
+    private void checkInteractions(Rectangle waiterBounds) {
         boolean interactionIsPossible = false;
         for (Customer c : stuff.getCustomers()) {
             if (waiterBounds.overlaps(c.getDialogBounds())) {
@@ -56,7 +75,9 @@ public class RestaurantObserver {
             }
         }
         stuff.setInteractionIsPossible(interactionIsPossible);
+    }
 
+    private void checkCounter(Rectangle waiterBounds) {
         if (stuff.getWaiter().getBounds().overlaps(stuff.getCounter().getBottomBounds())) {
             stuff.getWaiter().setPosition(
                     stuff.getWaiter().getPosition().x - stuff.getWaiter().getVelocity().x,

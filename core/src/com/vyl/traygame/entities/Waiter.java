@@ -7,7 +7,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.vyl.traygame.enums.Action;
+import com.vyl.traygame.enums.DialogType;
+import com.vyl.traygame.enums.Interaction;
 import com.vyl.traygame.helpers.Constants;
+import com.vyl.traygame.helpers.Dialog;
 
 public class Waiter extends Entity {
 
@@ -15,6 +19,7 @@ public class Waiter extends Entity {
     private Texture texture, shirt;
     private boolean facingLeft;
     private Action action;
+    private Dialog greetingsDialog;
 
     public Waiter() {
         super(
@@ -30,6 +35,11 @@ public class Waiter extends Entity {
         texture = new Texture(Gdx.files.internal("guy.png"));
         shirt = new Texture(Gdx.files.internal("shirt.png"));
         action = Action.WALKING;
+        greetingsDialog = new Dialog(
+                this,
+                "Excuse me, may I have your order?",
+                DialogType.GREETINGS
+        );
     }
 
     public void handleArrows(int keycode, boolean down) {
@@ -193,5 +203,9 @@ public class Waiter extends Entity {
                 bounds.width,
                 bounds.height * 2
         );
+    }
+
+    public Dialog getGreetingsDialog() {
+        return greetingsDialog;
     }
 }

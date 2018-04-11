@@ -9,13 +9,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DialogBox {
 
-    private String dialog;
+    private String dialog, option1, option2;
     private Texture pixel;
     private BitmapFont font;
-    private float fontWidth, fontHeight, height;
+    private float fontWidth, fontHeight, fontWidth2, fontHeight2, height;
     private boolean visible;
     private Entity currentSpeaker;
     private float time;
+    private boolean showingOptions;
 
     public DialogBox(float height) {
         dialog = "";
@@ -167,21 +168,51 @@ public class DialogBox {
     }
 
     private void renderText(SpriteBatch batch) {
-        font.draw(
-                batch,
-                dialog,
-                Gdx.graphics.getWidth() / 2 - fontWidth / 2,
-                Gdx.graphics.getHeight() * 0.1f + fontHeight / 2
-        );
+        if (showingOptions) {
+            font.draw(
+                    batch,
+                    option1,
+                    Gdx.graphics.getWidth() / 2 - fontWidth / 2,
+                    Gdx.graphics.getHeight() * 0.12f + fontHeight / 2
+            );
+            font.draw(
+                    batch,
+                    option2,
+                    Gdx.graphics.getWidth() / 2 - fontWidth2 / 2,
+                    Gdx.graphics.getHeight() * 0.08f + fontHeight2 / 2
+            );
+        } else {
+            font.draw(
+                    batch,
+                    dialog,
+                    Gdx.graphics.getWidth() / 2 - fontWidth / 2,
+                    Gdx.graphics.getHeight() * 0.1f + fontHeight / 2
+            );
+        }
     }
 
     public void update(Entity speaker, String dialog) {
+        showingOptions = false;
         time = 0;
         this.currentSpeaker = speaker;
         this.dialog = dialog;
         GlyphLayout glyph = new GlyphLayout(font, dialog);
         fontWidth = glyph.width;
         fontHeight = glyph.height;
+    }
+
+    public void update(Entity speaker, String option1, String option2) {
+        showingOptions = true;
+        time = 0;
+        this.currentSpeaker = speaker;
+        this.option1 = option1;
+        this.option2 = option2;
+        GlyphLayout glyph = new GlyphLayout(font, option1);
+        fontWidth = glyph.width;
+        fontHeight = glyph.height;
+        glyph = new GlyphLayout(font, option2);
+        fontWidth2 = glyph.width;
+        fontHeight2 = glyph.height;
     }
 
     public void setVisible(boolean visible) {
