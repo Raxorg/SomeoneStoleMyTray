@@ -7,6 +7,7 @@ public class DialogManager {
 
     private Dialog[] dialogs;
     private Dialog currentDialog;
+    private DialogType currentDialogType;
 
     public DialogManager(RestaurantStuff stuff) {
         dialogs = new Dialog[1];
@@ -125,12 +126,12 @@ public class DialogManager {
                 DialogType.OPTION
         );
         Dialog answer2211 = new Dialog(
-                stuff.getWaiter(),
+                stuff.getCustomers().get(0),
                 "SOMEONE HELP ME PLEASE!",
                 DialogType.GAME_OVER
         );
         Dialog answer2212 = new Dialog(
-                stuff.getWaiter(),
+                stuff.getCustomers().get(0),
                 "No problem kiddo",
                 DialogType.END
         );
@@ -139,7 +140,7 @@ public class DialogManager {
         option2212.setAnswer(answer2212);
         answer221.setOptions(option2211, option2212);
         option221.setAnswer(answer221);
-        option221.setAnswer(answer222);
+        option222.setAnswer(answer222);
         answer22.setOptions(option221, option222);
         option21.setAnswer(answer21);
         option22.setAnswer(answer22);
@@ -163,22 +164,20 @@ public class DialogManager {
         return currentDialog;
     }
 
-    public void nextDialog() {
-        switch (currentDialog.getType()) {
-            case START:
-                break;
-            case OPTION:
-                break;
-            case ANSWER:
-                break;
-            case GAME_OVER:
-                break;
-            case END:
-                break;
-        }
+    public void setCurrentDialog(Dialog currentDialog) {
+        this.currentDialog = currentDialog;
     }
 
     public void setDialog(int index) {
         currentDialog = dialogs[index];
+        currentDialogType = DialogType.GREETINGS;
+    }
+
+    public DialogType getCurrentDialogType() {
+        return currentDialogType;
+    }
+
+    public void setCurrentDialogType(DialogType currentDialogType) {
+        this.currentDialogType = currentDialogType;
     }
 }

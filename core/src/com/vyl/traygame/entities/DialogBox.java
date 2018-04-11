@@ -172,20 +172,20 @@ public class DialogBox {
             font.draw(
                     batch,
                     option1,
-                    Gdx.graphics.getWidth() / 2 - fontWidth / 2,
+                    height + (Gdx.graphics.getWidth() - height) / 2 - fontWidth / 2,
                     Gdx.graphics.getHeight() * 0.12f + fontHeight / 2
             );
             font.draw(
                     batch,
                     option2,
-                    Gdx.graphics.getWidth() / 2 - fontWidth2 / 2,
+                    height + (Gdx.graphics.getWidth() - height) / 2 - fontWidth2 / 2,
                     Gdx.graphics.getHeight() * 0.08f + fontHeight2 / 2
             );
         } else {
             font.draw(
                     batch,
                     dialog,
-                    Gdx.graphics.getWidth() / 2 - fontWidth / 2,
+                    height + (Gdx.graphics.getWidth() - height) / 2 - fontWidth / 2,
                     Gdx.graphics.getHeight() * 0.1f + fontHeight / 2
             );
         }

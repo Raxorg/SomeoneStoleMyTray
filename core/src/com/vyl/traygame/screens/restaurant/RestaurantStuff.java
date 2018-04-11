@@ -13,7 +13,9 @@ import com.vyl.traygame.entities.Entity;
 import com.vyl.traygame.entities.Table;
 import com.vyl.traygame.entities.Waiter;
 import com.vyl.traygame.enums.Action;
+import com.vyl.traygame.enums.DialogType;
 import com.vyl.traygame.enums.Interaction;
+import com.vyl.traygame.helpers.Dialog;
 import com.vyl.traygame.helpers.DialogManager;
 import com.vyl.traygame.hud.InteractionBubble;
 
@@ -126,34 +128,48 @@ public class RestaurantStuff extends ScreenAdapter {
 
     public void keyAction(int keycode, boolean down) {
         if (waiter.getAction() == Action.TALKING) {
-            if(down) {
+            if (down) {
                 return;
             }
             switch (keycode) {
                 case Input.Keys.A:
-                    switch (dialogManager.getCurrentDialog().getType()) {
-                        case START:
-                            // TODO SHOW OPTIONS
+                    switch (dialogManager.getCurrentDialogType()) {
+                        case GREETINGS:
                             observer.showDialog(dialogManager.getCurrentDialog());
+                            dialogManager.setCurrentDialogType(DialogType.START);
+                            break;
+                        case START:
+                            Dialog dialog = dialogManager.getCurrentDialog();
+                            observer.showOptions(dialog.getOption1(), dialog.getOption2());
+                            dialogManager.setCurrentDialogType(DialogType.OPTION);
                             break;
                         case OPTION:
-                            // TODO SHOW ANSWER
+                            dialogManager.setCurrentDialog(dialogManager.getCurrentDialog().getOption1().getAnswer());
+                            observer.showDialog(dialogManager.getCurrentDialog());
+                            dialogManager.setCurrentDialogType(dialogManager.getCurrentDialog().getType());
                             break;
                         case ANSWER:
-                            // TODO SHOW OPTIONS
+                            dialog = dialogManager.getCurrentDialog();
+                            observer.showOptions(dialog.getOption1(),dialog.getOption2());
+                            dialogManager.setCurrentDialogType(DialogType.OPTION);
                             break;
                         case GAME_OVER:
                             // TODO SHOW GAME OVER SCREEN
                             break;
                         case END:
-                            // TODO END CONVERSATION
+                            observer.hideDialog();
+                            waiter.setAction(Action.WALKING);
+                            interacting = false;
                             break;
                     }
                     break;
                 case Input.Keys.B:
-                    observer.hideDialog();
-                    waiter.setAction(Action.WALKING);
-                    interacting = false;
+                    if (dialogManager.getCurrentDialogType() == DialogType.OPTION) {
+                        dialogManager.setCurrentDialog(dialogManager.getCurrentDialog().getOption2().getAnswer());
+                        observer.showDialog(dialogManager.getCurrentDialog());
+                        dialogManager.setCurrentDialogType(dialogManager.getCurrentDialog().getType());
+                        break;
+                    }
                     break;
             }
             return;
