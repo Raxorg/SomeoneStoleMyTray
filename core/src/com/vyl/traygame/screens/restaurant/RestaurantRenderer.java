@@ -37,6 +37,7 @@ public class RestaurantRenderer {
         if (stuff.isInteractionIsPossible() && !stuff.isInteracting()) {
             stuff.getInteractionBubble().render(batch, stuff.getInteractionKey());
         }
+        stuff.getTimer().render(batch);
         batch.end();
     }
 

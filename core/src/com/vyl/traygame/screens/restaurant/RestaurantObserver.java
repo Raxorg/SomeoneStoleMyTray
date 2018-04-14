@@ -1,5 +1,6 @@
 package com.vyl.traygame.screens.restaurant;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.vyl.traygame.entities.Customer;
@@ -11,8 +12,7 @@ import com.vyl.traygame.helpers.Dialog;
 public class RestaurantObserver {
 
     private RestaurantStuff stuff;
-    private boolean showingDialog;
-    private float time;
+    private boolean showingDialog, againstTime;
 
     public RestaurantObserver(RestaurantStuff stuff) {
         this.stuff = stuff;
@@ -23,8 +23,11 @@ public class RestaurantObserver {
 
         if (!showingDialog) {
             checkWaiter();
+            if (againstTime) {
+                stuff.getTimer().update();
+            }
         } else {
-
+            // TODO remember what to do here
         }
     }
 
@@ -78,11 +81,16 @@ public class RestaurantObserver {
     }
 
     private void checkCounter(Rectangle waiterBounds) {
-        if (stuff.getWaiter().getBounds().overlaps(stuff.getCounter().getBottomBounds())) {
+        if (waiterBounds.overlaps(stuff.getCounter().getBottomBounds())) {
             stuff.getWaiter().setPosition(
                     stuff.getWaiter().getPosition().x - stuff.getWaiter().getVelocity().x,
                     stuff.getWaiter().getPosition().y - stuff.getWaiter().getVelocity().y
             );
         }
+    }
+
+    public void setAgainstTime(boolean againstTime) {
+        this.againstTime = againstTime;
+        stuff.getTimer().setVisible(againstTime);
     }
 }

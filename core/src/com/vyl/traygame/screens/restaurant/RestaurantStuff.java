@@ -11,6 +11,7 @@ import com.vyl.traygame.entities.Customer;
 import com.vyl.traygame.entities.DialogBox;
 import com.vyl.traygame.entities.Entity;
 import com.vyl.traygame.entities.Table;
+import com.vyl.traygame.entities.Timer;
 import com.vyl.traygame.entities.Waiter;
 import com.vyl.traygame.enums.Action;
 import com.vyl.traygame.enums.DialogType;
@@ -29,6 +30,7 @@ public class RestaurantStuff extends ScreenAdapter {
     private DialogBox dialogBox;
     private Waiter waiter;
     private Counter counter;
+    private Timer timer;
     private DelayedRemovalArray<Customer> customers;
     private DelayedRemovalArray<Table> tables;
 
@@ -48,6 +50,7 @@ public class RestaurantStuff extends ScreenAdapter {
         dialogBox = new DialogBox(Gdx.graphics.getHeight() * 0.18f);
         waiter = new Waiter();
         counter = new Counter();
+        timer = new Timer();
 
         generateTables();
         generateCustomers();
@@ -89,6 +92,24 @@ public class RestaurantStuff extends ScreenAdapter {
                 new Vector2(),
                 0
         ));
+        customers.add(new Customer(
+                "Tyson",
+                this,
+                true,
+                new Vector2(),
+                1
+        ));
+        customers.add(new Customer(
+                "Hans",
+                this,
+                true,
+                new Vector2(),
+                2
+        ));
+        sitCustomers(customers);
+    }
+
+    private void sitCustomers(DelayedRemovalArray<Customer> customers) {
         for (Customer customer : customers) {
             boolean customerAssigned = false;
             while (!customerAssigned) {
@@ -161,6 +182,12 @@ public class RestaurantStuff extends ScreenAdapter {
                             waiter.setAction(Action.WALKING);
                             interacting = false;
                             break;
+                        case TIMER:
+                            observer.hideDialog();
+                            waiter.setAction(Action.WALKING);
+                            interacting = false;
+                            observer.setAgainstTime(true);
+                            break;
                     }
                     break;
                 case Input.Keys.B:
@@ -228,5 +255,9 @@ public class RestaurantStuff extends ScreenAdapter {
     public void startDialog(int index) {
         observer.showDialog(waiter.getGreetingsDialog());
         dialogManager.setDialog(index);
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 }

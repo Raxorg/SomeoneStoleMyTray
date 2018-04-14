@@ -6,5 +6,6 @@ public enum DialogType {
     OPTION,
     ANSWER,
     GAME_OVER,
-    END
+    END,
+    TIMER
 }
