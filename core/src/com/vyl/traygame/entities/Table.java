@@ -1,15 +1,16 @@
 package com.vyl.traygame.entities;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.vyl.traygame.enums.Interaction;
+import com.vyl.traygame.util.Assets;
 
 public class Table extends Entity {
 
-    private Texture table, toppings;
+    private TextureRegion table, toppings;
     private Customer left, right;
 
     public Table(Vector2 position) {
@@ -19,12 +20,12 @@ public class Table extends Entity {
                         (int) position.x,
                         (int) position.y,
                         17 * 8,
-                        12 * 8
+                        9 * 8
                 ),
-                new Texture("table.png")
+                Assets.instance.restaurantAssets.table
         );
-        table = new Texture("table.png");
-        toppings = new Texture("toppings.png");
+        table = Assets.instance.restaurantAssets.table;
+        toppings = Assets.instance.restaurantAssets.toppings;
     }
 
     public void render(SpriteBatch batch) {
@@ -33,8 +34,8 @@ public class Table extends Entity {
                 table,
                 bounds.x,
                 bounds.y,
-                table.getWidth() * 8,
-                table.getHeight() * 8
+                table.getRegionWidth() * 8,
+                table.getRegionHeight() * 8
         );
     }
 
@@ -43,9 +44,9 @@ public class Table extends Entity {
         batch.draw(
                 toppings,
                 bounds.x,
-                bounds.y,
-                table.getWidth() * 8,
-                table.getHeight() * 8
+                bounds.y + (table.getRegionHeight() * 8),
+                toppings.getRegionWidth() * 8,
+                toppings.getRegionHeight() * 8
         );
     }
 
@@ -61,7 +62,7 @@ public class Table extends Entity {
             this.right = customer;
             float width = customer.isMale() ? 13 * 5 : 11 * 5;
             customer.setPosition(new Vector2(
-                    bounds.x + table.getWidth() * 8 - width,
+                    bounds.x + table.getRegionWidth() * 8 - width,
                     bounds.y
             ));
             customer.setFacingDirection(true);

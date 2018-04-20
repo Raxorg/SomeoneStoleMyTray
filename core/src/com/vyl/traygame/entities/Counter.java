@@ -6,11 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.vyl.traygame.enums.Interaction;
-import com.vyl.traygame.helpers.Constants;
+import com.vyl.traygame.util.Assets;
+import com.vyl.traygame.util.Constants;
 
 public class Counter extends Entity {
 
-    private Texture counter, counter2, counter3, bottle, whiskey, computer;
+    private Texture bottle, whiskey, computer;
     private Rectangle bottomBounds;
 
     public Counter() {
@@ -22,7 +23,7 @@ public class Counter extends Entity {
                         480,
                         360
                 ),
-                new Texture("counter.png")
+                Assets.instance.restaurantAssets.counter
         );
         bottomBounds = new Rectangle(
                 Gdx.graphics.getWidth() - 480 * 1.25f,
@@ -30,9 +31,6 @@ public class Counter extends Entity {
                 480,
                 80
         );
-        counter = new Texture("counter.png");
-        counter2 = new Texture("counter2.png");
-        counter3 = new Texture("counter3.png");
         bottle = new Texture("bottle.png");
         whiskey = new Texture("whiskey.png");
         computer = new Texture("registradora.png");
@@ -41,7 +39,7 @@ public class Counter extends Entity {
     public void renderBottom(SpriteBatch batch) {
         batch.setColor(Color.WHITE);
         batch.draw(
-                counter,
+                Assets.instance.restaurantAssets.bottomCounter,
                 bounds.x,
                 bounds.y,
                 bounds.width,
@@ -59,14 +57,14 @@ public class Counter extends Entity {
     public void renderTop(SpriteBatch batch) {
         batch.setColor(Color.WHITE);
         batch.draw(
-                counter3,
+                Assets.instance.restaurantAssets.topCounter,
                 bounds.x,
                 bounds.y,
                 bounds.width,
                 bounds.height
         );
         batch.draw(
-                counter2,
+                Assets.instance.restaurantAssets.shelve,
                 bounds.x,
                 bounds.y,
                 bounds.width,

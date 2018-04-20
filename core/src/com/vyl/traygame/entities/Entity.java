@@ -1,6 +1,6 @@
 package com.vyl.traygame.entities;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.vyl.traygame.enums.Interaction;
@@ -9,9 +9,9 @@ public abstract class Entity {
 
     private String name;
     Rectangle bounds;
-    private Texture image;
+    private TextureRegion image;
 
-    Entity(String name, Rectangle bounds, Texture image) {
+    Entity(String name, Rectangle bounds, TextureRegion image) {
         this.name = name;
         this.bounds = bounds;
         this.image = image;
@@ -35,7 +35,7 @@ public abstract class Entity {
         return name;
     }
 
-    public Texture getImage() {
+    public TextureRegion getImage() {
         return image;
     }
 }

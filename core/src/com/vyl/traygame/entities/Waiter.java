@@ -10,8 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.vyl.traygame.enums.Action;
 import com.vyl.traygame.enums.DialogType;
 import com.vyl.traygame.enums.Interaction;
-import com.vyl.traygame.helpers.Constants;
 import com.vyl.traygame.helpers.Dialog;
+import com.vyl.traygame.util.Assets;
+import com.vyl.traygame.util.Constants;
 
 public class Waiter extends Entity {
 
@@ -29,7 +30,7 @@ public class Waiter extends Entity {
                         (int) (Gdx.graphics.getHeight() * 0.2f),
                         13 * 5,
                         29 * 5 / 2
-                ), new Texture("waiterImage.png")
+                ), Assets.instance.restaurantAssets.waiterImage
         );
         velocity = new Vector2();
         texture = new Texture(Gdx.files.internal("guy.png"));

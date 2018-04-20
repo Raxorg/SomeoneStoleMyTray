@@ -151,19 +151,19 @@ public class DialogBox {
                 currentSpeaker.getImage(),
                 10,
                 10,
-                currentSpeaker.getImage().getWidth() / 2,
-                currentSpeaker.getImage().getHeight() / 2,
+                currentSpeaker.getImage().getRegionWidth() / 2,
+                currentSpeaker.getImage().getRegionHeight() / 2,
                 height - 20,
                 height - 20,
                 1,
                 1,
-                0,
-                0,
-                0,
-                currentSpeaker.getImage().getWidth(),
-                currentSpeaker.getImage().getHeight(),
-                false,
-                false
+                0
+                //0,
+                //0,
+                //currentSpeaker.getImage().getRegionWidth(),
+                //currentSpeaker.getImage().getRegionHeight(),
+                //false,
+                //false
         );
     }
 

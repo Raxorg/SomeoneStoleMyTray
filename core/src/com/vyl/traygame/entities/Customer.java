@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.vyl.traygame.enums.Interaction;
 import com.vyl.traygame.screens.restaurant.RestaurantStuff;
+import com.vyl.traygame.util.Assets;
 
 public class Customer extends Entity {
 
@@ -28,7 +29,7 @@ public class Customer extends Entity {
                         13 * 5,
                         29 * 5
                 ),
-                male ? new Texture("guyImage.png") : new Texture("girlImage.png")
+                male ? Assets.instance.restaurantAssets.guy : Assets.instance.restaurantAssets.girl
         );
         dialogBounds = new Rectangle(
                 (int) position.x - 10,
