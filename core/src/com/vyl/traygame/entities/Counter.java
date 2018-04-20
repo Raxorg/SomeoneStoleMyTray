@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.vyl.traygame.enums.Interaction;
 import com.vyl.traygame.util.Assets;
@@ -11,7 +12,8 @@ import com.vyl.traygame.util.Constants;
 
 public class Counter extends Entity {
 
-    private Texture bottle, whiskey, computer;
+    private Texture bottle, whiskey, computer; // TODO convert to region
+    private TextureRegion bottomCounter, topCounter, shelve;
     private Rectangle bottomBounds;
 
     public Counter() {
@@ -31,6 +33,9 @@ public class Counter extends Entity {
                 480,
                 80
         );
+        bottomCounter = Assets.instance.restaurantAssets.bottomCounter;
+        topCounter = Assets.instance.restaurantAssets.topCounter;
+        shelve = Assets.instance.restaurantAssets.shelve;
         bottle = new Texture("bottle.png");
         whiskey = new Texture("whiskey.png");
         computer = new Texture("registradora.png");
@@ -39,11 +44,11 @@ public class Counter extends Entity {
     public void renderBottom(SpriteBatch batch) {
         batch.setColor(Color.WHITE);
         batch.draw(
-                Assets.instance.restaurantAssets.bottomCounter,
+                bottomCounter,
                 bounds.x,
                 bounds.y,
                 bounds.width,
-                bounds.height
+                bottomCounter.getRegionHeight() * (bounds.width / bottomCounter.getRegionWidth())
         );
         batch.draw(
                 computer,
@@ -57,18 +62,18 @@ public class Counter extends Entity {
     public void renderTop(SpriteBatch batch) {
         batch.setColor(Color.WHITE);
         batch.draw(
-                Assets.instance.restaurantAssets.topCounter,
+                topCounter,
                 bounds.x,
-                bounds.y,
+                bounds.y + bottomCounter.getRegionHeight() * (bounds.width / bottomCounter.getRegionWidth()),
                 bounds.width,
-                bounds.height
+                topCounter.getRegionHeight() * (bounds.width / topCounter.getRegionWidth())
         );
         batch.draw(
-                Assets.instance.restaurantAssets.shelve,
-                bounds.x,
-                bounds.y,
-                bounds.width,
-                bounds.height
+                shelve,
+                bounds.x + bounds.width * 46f / 120f,
+                bounds.y + bounds.height * 55f / 90f,
+                bounds.width * shelve.getRegionWidth() / 120f,
+                bounds.height * shelve.getRegionHeight() / 90f
         );
         // 72, 34 botellas y
         // 47, 65 botellas x
