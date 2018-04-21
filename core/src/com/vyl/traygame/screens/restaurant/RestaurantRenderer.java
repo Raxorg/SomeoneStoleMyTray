@@ -28,9 +28,9 @@ public class RestaurantRenderer {
 
         drawCustomersBottom();
         drawTables();
-        stuff.getCounter().renderTop(batch);
-        stuff.getWaiter().render(batch);
         stuff.getCounter().renderBottom(batch);
+        stuff.getWaiter().render(batch);
+        stuff.getCounter().renderTop(batch);
         drawCustomersTop();
         drawToppings();
         stuff.getDialogBox().render(batch);

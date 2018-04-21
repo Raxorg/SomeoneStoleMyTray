@@ -29,7 +29,7 @@ public class Customer extends Entity {
                         13 * 5,
                         29 * 5
                 ),
-                male ? Assets.instance.restaurantAssets.guy : Assets.instance.restaurantAssets.girl
+                male ? Assets.instance.restaurantAssets.guyImage : Assets.instance.restaurantAssets.girlImage
         );
         dialogBounds = new Rectangle(
                 (int) position.x - 10,

@@ -48,9 +48,8 @@ public class Assets implements Disposable, AssetErrorListener {
         public final TextureRegion topCounter;
         public final TextureRegion shelve;
         public final TextureRegion counter;
-        public final TextureRegion waiterImage;
-        public final TextureRegion guy;
-        public final TextureRegion girl;
+        public final TextureRegion waiterImage, guyImage, girlImage;
+        public final TextureRegion guy, girl;
 
         public RestaurantAssets(Texture restaurant) {
             // Table
@@ -61,10 +60,13 @@ public class Assets implements Disposable, AssetErrorListener {
             topCounter = new TextureRegion(restaurant, 0, 53, 120, 18);
             shelve = new TextureRegion(restaurant, 46, 0, 74, 35);
             counter = new TextureRegion(restaurant, 0, 0, 120, 90);
-            // People
+            // Images for dialog
             waiterImage = new TextureRegion(restaurant, 0, 13, 13, 13);
-            guy = new TextureRegion(restaurant, 0, 0, 13, 13);
-            girl = new TextureRegion(restaurant, 13, 0, 11, 11);
+            guyImage = new TextureRegion(restaurant, 0, 0, 13, 13);
+            girlImage = new TextureRegion(restaurant, 13, 0, 11, 11);
+            // People
+            guy = new TextureRegion(restaurant, 120, 0, 13, 29);
+            girl = new TextureRegion(restaurant, 120, 29, 11, 28);
         }
     }
 

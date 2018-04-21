@@ -51,12 +51,16 @@ public class Counter extends Entity {
                 bottomCounter.getRegionHeight() * (bounds.width / bottomCounter.getRegionWidth())
         );
         batch.draw(
-                computer,
-                bounds.x,
-                bounds.y + 37 * (360 / 90),
-                72 * 2,
-                41 * 2
+                shelve,
+                bounds.x + bounds.width * 46f / 120f,
+                bounds.y + bounds.height * 55f / 90f,
+                bounds.width * shelve.getRegionWidth() / 120f,
+                bounds.height * shelve.getRegionHeight() / 90f
         );
+        // 72, 34 botellas y
+        // 47, 65 botellas x
+        drawTopBottles(batch);
+        drawBottomBottles(batch);
     }
 
     public void renderTop(SpriteBatch batch) {
@@ -69,16 +73,12 @@ public class Counter extends Entity {
                 topCounter.getRegionHeight() * (bounds.width / topCounter.getRegionWidth())
         );
         batch.draw(
-                shelve,
-                bounds.x + bounds.width * 46f / 120f,
-                bounds.y + bounds.height * 55f / 90f,
-                bounds.width * shelve.getRegionWidth() / 120f,
-                bounds.height * shelve.getRegionHeight() / 90f
+                computer,
+                bounds.x,
+                bounds.y + 37 * (360 / 90),
+                72 * 2,
+                41 * 2
         );
-        // 72, 34 botellas y
-        // 47, 65 botellas x
-        drawTopBottles(batch);
-        drawBottomBottles(batch);
     }
 
     private void drawTopBottles(SpriteBatch batch) {
